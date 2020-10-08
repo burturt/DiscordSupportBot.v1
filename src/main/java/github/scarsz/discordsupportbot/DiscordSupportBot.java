@@ -104,7 +104,6 @@ public class DiscordSupportBot {
                     .setAudioEnabled(false)
                     .setAutoReconnect(true)
                     .setBulkDeleteSplittingEnabled(false)
-                    .setGame(Game.of("with tickets"))
                     .setToken(botToken)
                     .buildBlocking();
         } catch (Exception e) {

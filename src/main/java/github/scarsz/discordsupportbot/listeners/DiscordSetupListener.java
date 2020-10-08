@@ -37,7 +37,7 @@ public class DiscordSetupListener extends ListenerAdapter {
         GuildInfo guildInfo = DiscordSupportBot.getGuildInfo(event.getGuild());
         DiscordSupportBot.get().getRegisteredGuilds().remove(guildInfo);
 
-        if ((guildInfo != null && guildInfo.isSetUp()) || !event.getMessage().getRawContent().startsWith("...")) return;
+        if ((guildInfo != null && guildInfo.isSetUp()) || !event.getMessage().getContentRaw().startsWith("...")) return;
 
         System.out.println("Setting up " + event.getGuild());
         guildsBeingSetup.add(event.getGuild().getId());
@@ -51,7 +51,7 @@ public class DiscordSetupListener extends ListenerAdapter {
         String[] rolesAllowedToCloseTickets = new String[0];
         while (rolesAllowedToCloseTickets.length == 0) {
             event.getChannel().sendMessage("Enter a comma separated list of roles in this server that are able to close tickets. (Available: `" + event.getGuild().getRoles().stream().map(Role::getName).filter(s -> !s.equals("@everyone")).collect(Collectors.joining(",")) + "`)").complete();
-            rolesAllowedToCloseTickets = Arrays.stream(DiscordUtil.pullGuildMessageReceivedEvent(event.getAuthor()).getMessage().getRawContent().split(","))
+            rolesAllowedToCloseTickets = Arrays.stream(DiscordUtil.pullGuildMessageReceivedEvent(event.getAuthor()).getMessage().getContentRaw().split(","))
                     .map(s -> DiscordUtil.getRoleByNameFromGuild(event.getGuild(), s))
                     .filter(Objects::nonNull)
                     .map(ISnowflake::getId)

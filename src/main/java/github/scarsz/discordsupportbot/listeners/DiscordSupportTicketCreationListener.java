@@ -34,7 +34,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
         List<TextChannel> possiblePreExistingTicketChannels = event.getGuild().getTextChannelsByName(event.getChannel().getName() + "-" + event.getAuthor().getId(), true);
         if (possiblePreExistingTicketChannels.size() > 0) {
-            possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getRawContent() + "\n```").queue();
+            possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getContentRaw() + "\n```").queue();
             event.getMessage().delete().queue();
             return;
         }
@@ -60,7 +60,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
         newChannel.sendMessage(MESSAGE_TEMPLATE
                 .replace("{AUTHOR}", event.getAuthor().getAsMention())
-                .replace("{MESSAGE}", event.getMessage().getRawContent())
+                .replace("{MESSAGE}", event.getMessage().getContentRaw())
                 .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
         ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
 

@@ -78,8 +78,8 @@ public class DiscordUtil {
     public static int pullInteger(TextChannel channel, User user) {
         while (1 < 2) {
             GuildMessageReceivedEvent pulled = DiscordUtil.pullGuildMessageReceivedEvent(user);
-            if (StringUtils.isNumeric(pulled.getMessage().getRawContent())) {
-                return Integer.parseInt(pulled.getMessage().getRawContent());
+            if (StringUtils.isNumeric(pulled.getMessage().getContentRaw())) {
+                return Integer.parseInt(pulled.getMessage().getContentRaw());
             } else {
                 channel.sendMessage("Your message must be an integer.").queue();
             }

@@ -66,7 +66,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         List<String> transcriptList = new LinkedList<>();
         for (Message message : history.getRetrievedHistory()) {
             String timeStamp = message.getCreationTime().getMonth().name() + " " + message.getCreationTime().getDayOfMonth() + ", " + message.getCreationTime().getYear() + " " + message.getCreationTime().getHour() + ":" + message.getCreationTime().getMinute() + ":" + message.getCreationTime().getSecond();
-            transcriptList.add("[" + timeStamp + "] " + message.getAuthor() + ": " + message.getRawContent());
+            transcriptList.add("[" + timeStamp + "] " + message.getAuthor() + ": " + message.getContentRaw());
         }
         Collections.reverse(transcriptList);
         List<String> transcriptMessages = new LinkedList<>();
