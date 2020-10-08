@@ -3,11 +3,11 @@ package github.scarsz.discordsupportbot.listeners;
 import github.scarsz.discordsupportbot.DiscordSupportBot;
 import github.scarsz.discordsupportbot.DiscordUtil;
 import github.scarsz.discordsupportbot.GuildInfo;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ISnowflake;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,16 +42,15 @@ public class DiscordSetupListener extends ListenerAdapter {
         System.out.println("Setting up " + event.getGuild());
         guildsBeingSetup.add(event.getGuild().getId());
 
-        boolean pmTranscriptsOnClose = DiscordUtil.pullYesOrNo(event.getChannel().sendMessage("PM chat transcript to all participants of a given ticket when it is closed? (Suggested: ✅)").complete(), event.getAuthor());
-        boolean authorCanCloseTicket = DiscordUtil.pullYesOrNo(event.getChannel().sendMessage("Author can close their tickets themselves? (otherwise only approved ticket-closers) (Suggested: ✅)").complete(), event.getAuthor());
-        String defaultReactionEmoji = DiscordUtil.pullGuildMessageReactionAddEvent(event.getChannel().sendMessage("React to this message to set the default emoji to react with for the first message in a ticket. (Suggested: ✅) ***__NOTE:__ CUSTOM EMOJIS NOT SUPPORTED CURRENTLY***").complete(), event.getAuthor()).getReactionEmote().getName();
-        int secondsUntilTicketCloses = DiscordUtil.pullInteger(event.getChannel().sendMessage("Seconds until a ticket's text channel is deleted after the ticket being marked as solved? (Suggested: 60)").complete().getTextChannel(), event.getAuthor());
-        int hoursUntilChannelTimeout = DiscordUtil.pullInteger(event.getChannel().sendMessage("How many hours can go by since the last message in a channel before the channel is deleted due to inactivity? (Suggested: 72 [3 days])").complete().getTextChannel(), event.getAuthor());
-        int maxOpenTickets = DiscordUtil.pullInteger(event.getChannel().sendMessage("How many tickets can be open in this server at any given time? (Suggested: 0 [unlimited])").complete().getTextChannel(), event.getAuthor());
+        boolean pmTranscriptsOnClose = true;
+        boolean authorCanCloseTicket = false;
+        String defaultReactionEmoji = "🔒";
+        int secondsUntilTicketCloses = 15;
+        int hoursUntilChannelTimeout = 72;
+        int maxOpenTickets = 0;
         String[] rolesAllowedToCloseTickets = new String[0];
         while (rolesAllowedToCloseTickets.length == 0) {
-            event.getChannel().sendMessage("Enter a comma separated list of roles in this server that are able to close tickets. (Available: `" + event.getGuild().getRoles().stream().map(Role::getName).filter(s -> !s.equals("@everyone")).collect(Collectors.joining(",")) + "`)").complete();
-            rolesAllowedToCloseTickets = Arrays.stream(DiscordUtil.pullGuildMessageReceivedEvent(event.getAuthor()).getMessage().getContentRaw().split(","))
+            rolesAllowedToCloseTickets = Arrays.stream("Admin".split(","))
                     .map(s -> DiscordUtil.getRoleByNameFromGuild(event.getGuild(), s))
                     .filter(Objects::nonNull)
                     .map(ISnowflake::getId)

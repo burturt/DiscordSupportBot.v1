@@ -2,13 +2,13 @@ package github.scarsz.discordsupportbot.listeners;
 
 import github.scarsz.discordsupportbot.DiscordSupportBot;
 import github.scarsz.discordsupportbot.GuildInfo;
-import net.dv8tion.jda.core.entities.ISnowflake;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageHistory;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.RestAction;
+import net.dv8tion.jda.api.entities.ISnowflake;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageHistory;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
 
         List<String> transcriptList = new LinkedList<>();
         for (Message message : history.getRetrievedHistory()) {
-            String timeStamp = message.getCreationTime().getMonth().name() + " " + message.getCreationTime().getDayOfMonth() + ", " + message.getCreationTime().getYear() + " " + message.getCreationTime().getHour() + ":" + message.getCreationTime().getMinute() + ":" + message.getCreationTime().getSecond();
+            String timeStamp = message.getTimeCreated().getMonth().name() + " " + message.getTimeCreated().getDayOfMonth() + ", " + message.getTimeCreated().getYear() + " " + message.getTimeCreated().getHour() + ":" + message.getTimeCreated().getMinute() + ":" + message.getTimeCreated().getSecond();
             transcriptList.add("[" + timeStamp + "] " + message.getAuthor() + ": " + message.getContentRaw());
         }
         Collections.reverse(transcriptList);

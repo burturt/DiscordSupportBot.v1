@@ -2,10 +2,10 @@ package github.scarsz.discordsupportbot.listeners;
 
 import github.scarsz.discordsupportbot.DiscordSupportBot;
 import github.scarsz.discordsupportbot.GuildInfo;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,11 +49,11 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
         String channelName = event.getChannel().getName() + "-" + event.getAuthor().getId();
         TextChannel newChannel;
         if (event.getChannel().getParent() == null) {
-            newChannel = (TextChannel) event.getGuild().getController().createTextChannel(channelName).complete();
+            newChannel = (TextChannel) event.getGuild().createTextChannel(channelName).complete();
         } else {
             newChannel = (TextChannel) event.getChannel().getParent().createTextChannel(channelName).complete();
         }
-        event.getGuild().getController().modifyTextChannelPositions().selectPosition(newChannel).moveTo(event.getChannel().getPosition() + 1).queue();
+        event.getGuild().modifyTextChannelPositions().selectPosition(newChannel).moveTo(event.getChannel().getPosition() + 1).queue();
 
         // make the author forcefully have message read/write permission
         newChannel.createPermissionOverride(event.getMember()).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).queue();

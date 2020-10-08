@@ -4,12 +4,11 @@ import github.scarsz.discordsupportbot.listeners.DiscordSetupListener;
 import github.scarsz.discordsupportbot.listeners.DiscordSupportTicketCloseListener;
 import github.scarsz.discordsupportbot.listeners.DiscordSupportTicketCreationListener;
 import lombok.Getter;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -101,11 +100,11 @@ public class DiscordSupportBot {
         System.out.println("Logging in to Discord...");
         try {
             jda = new JDABuilder(AccountType.BOT)
-                    .setAudioEnabled(false)
                     .setAutoReconnect(true)
                     .setBulkDeleteSplittingEnabled(false)
                     .setToken(botToken)
-                    .buildBlocking();
+                    .build()
+                    .awaitReady();
         } catch (Exception e) {
             System.out.println("Failed to login to Discord: " + e.getMessage());
             e.printStackTrace();

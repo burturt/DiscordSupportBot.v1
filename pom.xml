@@ -65,7 +65,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.5.1_353</version>
+            <version>4.0.0_80</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -85,9 +85,15 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.12</version>
+            <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+    		<groupId>org.json</groupId>
+    		<artifactId>json</artifactId>
+    		<version>20200518</version>
+</dependency>
+
     </dependencies>
 
 </project>

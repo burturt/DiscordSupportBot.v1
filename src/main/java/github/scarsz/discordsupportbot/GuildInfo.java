@@ -2,7 +2,7 @@ package github.scarsz.discordsupportbot;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 

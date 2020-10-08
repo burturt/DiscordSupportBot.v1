@@ -1,10 +1,10 @@
 package github.scarsz.discordsupportbot;
 
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.lang.StringUtils;
 
 public class DiscordUtil {
@@ -13,7 +13,6 @@ public class DiscordUtil {
         final Object[] pulledEvent = {null};
 
         ListenerAdapter adapter = new ListenerAdapter() {
-            @Override
             public void onGenericEvent(Event event) {
                 if (event.getClass().getSimpleName().equals(eventClass.getSimpleName())) {
                     pulledEvent[0] = event;
