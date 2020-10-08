@@ -107,7 +107,7 @@ public class DiscordSupportBot {
                     .setGame(Game.of("with tickets"))
                     .setToken(botToken)
                     .buildBlocking();
-        } catch (LoginException | InterruptedException | RateLimitedException e) {
+        } catch (Exception e) {
             System.out.println("Failed to login to Discord: " + e.getMessage());
             e.printStackTrace();
             System.exit(2);
