@@ -34,7 +34,11 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
         List<TextChannel> possiblePreExistingTicketChannels = event.getGuild().getTextChannelsByName(event.getChannel().getName() + "-" + event.getAuthor().getId(), true);
         if (possiblePreExistingTicketChannels.size() > 0) {
+            try {
             possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getContentRaw() + "\n```").queue();
+            } catch (Exception e) {
+                possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getContentRaw().substring(0, event.getMessage().getContentRaw().length() - 250) + "\n```").queue();
+            }
             event.getMessage().delete().queue();
             return;
         }
