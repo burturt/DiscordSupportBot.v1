@@ -60,7 +60,11 @@ public class DiscordSetupListener extends ListenerAdapter {
         guildInfo = new GuildInfo(pmTranscriptsOnClose, event.getChannel().getId(), defaultReactionEmoji, authorCanCloseTicket, secondsUntilTicketCloses, rolesAllowedToCloseTickets, hoursUntilChannelTimeout, maxOpenTickets, event.getGuild().getId());
         DiscordSupportBot.get().getRegisteredGuilds().add(guildInfo);
 
-        event.getChannel().deleteMessages(event.getChannel().getHistory().retrievePast(100).complete()).complete();
+        try {
+            event.getChannel().deleteMessages(event.getChannel().getHistory().retrievePast(100).complete()).complete();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         event.getChannel().sendMessage("This channel is now set up to accept support ticket requests by people sending messages here. Take the time to send the channel's first message instructing users on how to request support (hint: saying messages here). To re-setup your support system, recreate this channel and type `...`. Note that support channels do not get made for you as you're the guild owner so you can send messages here freely.").queue(message -> message.delete().queueAfter(1, TimeUnit.MINUTES));
 
         guildsBeingSetup.remove(event.getGuild().getId());

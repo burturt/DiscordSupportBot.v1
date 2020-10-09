@@ -58,11 +58,20 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
         // make the author forcefully have message read/write permission
         newChannel.createPermissionOverride(event.getMember()).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).queue();
 
-        newChannel.sendMessage(MESSAGE_TEMPLATE
-                .replace("{AUTHOR}", event.getAuthor().getAsMention())
-                .replace("{MESSAGE}", event.getMessage().getContentRaw())
-                .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
-        ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
+        try {
+            newChannel.sendMessage(MESSAGE_TEMPLATE
+                    .replace("{AUTHOR}", event.getAuthor().getAsMention())
+                    .replace("{MESSAGE}", event.getMessage().getContentRaw())
+                    .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
+            ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
+        } catch (Exception e) {
+            newChannel.sendMessage(event.getMessage().getContentRaw()).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
+            newChannel.sendMessage(MESSAGE_TEMPLATE
+                    .replace("{AUTHOR}", event.getAuthor().getAsMention())
+                    .replace("{MESSAGE}", "See above message")
+                    .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
+            ).queue();
+        }
 
         event.getMessage().delete().queue();
     }
