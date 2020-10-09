@@ -15,7 +15,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
     private final String MESSAGE_TEMPLATE = "**__Author:__** {AUTHOR}\n" +
             "**__Message:__** {MESSAGE}\n" +
             "\n" +
-            "*To close this ticket, the ticket author needs to react to this message. Doing so will mark the ticket as solved. People with the following roles can close the ticket as well if necessary: {CLOSERS}*";
+            "Admin ping: <@&609582712898060299>\n*An admin will follow up with your request soon, and if none respond within 48 hours, feel free to ping the admin role.*\n*If you haven't already, please change your nickname to **something resembling your real name**. Thank you!*\n*To close this ticket, someone with the {CLOSERS} role needs to react to this message. Doing so will mark the request as solved.*";
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -35,9 +35,9 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
         List<TextChannel> possiblePreExistingTicketChannels = event.getGuild().getTextChannelsByName(event.getChannel().getName() + "-" + event.getAuthor().getId(), true);
         if (possiblePreExistingTicketChannels.size() > 0) {
             try {
-            possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getContentRaw() + "\n```").queue();
+            possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. Use this channel to continue discussing your join request.\n```\n" + event.getMessage().getContentRaw() + "\n```").queue();
             } catch (Exception e) {
-                possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. If you have a new issue, either solve the issues in this channel and mark it as solved or continue talking about the issue in this channel as-is.\n```\n" + event.getMessage().getContentRaw().substring(0, event.getMessage().getContentRaw().length() - 250) + "\n```").queue();
+                possiblePreExistingTicketChannels.get(0).sendMessage(event.getAuthor().getAsMention() + ", please send your messages to this channel. Use this channel to continue discussing your join request.\n```\n" + event.getMessage().getContentRaw().substring(0, event.getMessage().getContentRaw().length() - 250) + "\n```").queue();
             }
             event.getMessage().delete().queue();
             return;

@@ -52,7 +52,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
             e.printStackTrace();
         }
 
-        event.getChannel().sendMessage("Ticket marked as solved by " + event.getUser().getAsMention() + "! Closing ticket " + (guildInfo.isPmTranscriptsOnClose() ? "and PMing the transcript to all participants " : "") + "in " + guildInfo.getSecondsUntilTicketCloses() + " seconds...").complete();
+        event.getChannel().sendMessage("Join request marked as solved by " + event.getUser().getAsMention() + "! Closing join request " + (guildInfo.isPmTranscriptsOnClose() ? "and DMing the transcript to all participants " : "") + "in " + guildInfo.getSecondsUntilTicketCloses() + " seconds...").complete();
 
         try {
             Thread.sleep(guildInfo.getSecondsUntilTicketCloses() * 1000);
@@ -90,7 +90,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
 
         List<User> usersToMessageTranscriptTo = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot()).distinct().collect(Collectors.toList());
         usersToMessageTranscriptTo.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete).forEach(privateChannel -> {
-            privateChannel.sendMessage("Support ticket transcript regarding " + ticketAuthor + "'s ticket in " + event.getGuild()).queue();
+            privateChannel.sendMessage("Join request transcript regarding " + ticketAuthor + "'s ticket in " + event.getGuild()).queue();
             for (String transcriptMessage : transcriptMessages) {
                 privateChannel.sendMessage(transcriptMessage).queue();
             }
