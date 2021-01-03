@@ -14,3 +14,4 @@
 - You can join the official support bot discord at https://discord.gg/DDamWUd (not managed by me)
 - Run the bot `java -jar JARFILE.jar BOTTOKEN`. If you do not want to compile, github actions *should* be set up to automatically build the repo.
 - There is no public version of this bot since a) I'm poor, b) the config system is broken and is hardcoded, and c) the bot tends to sometimes break and I'm not restarting the bot every 20 seconds to fix it. A publically hosted version of the upstream repo can be found using https://discord.com/oauth2/authorize?client_id=324388172312346624&scope=bot&permissions=8 (though the bot may stop working at any time as it isn't updated) and the incomplete version 3 of this bot by scarsz can be found at https://github.com/DiscordSupportBot/DiscordSupportBot.v3.
+ 
