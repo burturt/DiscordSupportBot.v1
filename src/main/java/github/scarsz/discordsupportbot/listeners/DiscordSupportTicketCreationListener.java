@@ -15,7 +15,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
     private final String MESSAGE_TEMPLATE = "**__Author:__** {AUTHOR}\n" +
             "**__Message:__** {MESSAGE}\n" +
             "\n" +
-            "Admin ping: <@&609582712898060299>\n*An admin will follow up with your request soon, and if none respond within 48 hours, feel free to ping the admin role.*\n*If you haven't already, please change your nickname to **something resembling your real name**. Thank you!*\n*To close this ticket, someone with the {CLOSERS} role needs to react to this message. Doing so will mark the request as solved.*";
+            "Admin ping: <@&721867870346281091>\n*An admin will follow up with your request soon, and if none respond within 48 hours, feel free to ping the admin role again.*\n*If you haven't already, please change your nickname to **something resembling your real name**. Thank you!*\n*To close this ticket, someone with the {CLOSERS} role needs to react to this message. Doing so will mark the request as solved.*";
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
