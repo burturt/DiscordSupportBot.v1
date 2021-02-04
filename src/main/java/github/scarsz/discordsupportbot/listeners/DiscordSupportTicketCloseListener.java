@@ -2,10 +2,7 @@ package github.scarsz.discordsupportbot.listeners;
 
 import github.scarsz.discordsupportbot.DiscordSupportBot;
 import github.scarsz.discordsupportbot.GuildInfo;
-import net.dv8tion.jda.api.entities.ISnowflake;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageHistory;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -31,11 +28,20 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
     }
 
     private void handleTicketClose(GuildMessageReactionAddEvent event) {
+        if (event.getUser().isBot()) return;
         GuildInfo guildInfo = DiscordSupportBot.getGuildInfo(event.getGuild());
         if (guildInfo == null || !guildInfo.isSetUp()) return;
         String possibleTicketAuthorId = event.getChannel().getName().replace(guildInfo.getFirstMessageChannel().getName() + "-", "");
         if (!StringUtils.isNumeric(possibleTicketAuthorId)) return;
         User ticketAuthor = event.getJDA().getUserById(possibleTicketAuthorId);
+
+        if (event.getReactionEmote().getEmoji().equals("\u2705")) {
+            Role role = event.getGuild().getRolesByName("Student", false).get(0);
+            event.getGuild().addRoleToMember(possibleTicketAuthorId, role).queue();
+            event.getChannel().sendMessage("Join request approved by " + event.getUser().getAsMention() + ". Student role given to " + ticketAuthor.getAsMention() + ".").queue();
+        } else {
+            event.getChannel().sendMessage("Join request closed without approval by " + event.getUser().getAsMention() + ".").queue();
+        }
 
         boolean allowedToClose = (guildInfo.isAuthorCanCloseTicket() && event.getUser().equals(ticketAuthor)) ||
                 event.getMember().getRoles().stream().map(ISnowflake::getId).anyMatch(s -> guildInfo.getRolesAllowedToCloseTickets().contains(s));
@@ -52,7 +58,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
             e.printStackTrace();
         }
 
-        event.getChannel().sendMessage("Join request marked as solved by " + event.getUser().getAsMention() + "! Closing join request " + (guildInfo.isPmTranscriptsOnClose() ? "and DMing the transcript to all participants " : "") + "in " + guildInfo.getSecondsUntilTicketCloses() + " seconds...").complete();
+        event.getChannel().sendMessage((guildInfo.isPmTranscriptsOnClose() ? "DMing the transcript to all participants " : "") + "in " + guildInfo.getSecondsUntilTicketCloses() + " seconds...").complete();
 
         try {
             Thread.sleep(guildInfo.getSecondsUntilTicketCloses() * 1000);

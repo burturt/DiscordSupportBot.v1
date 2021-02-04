@@ -15,7 +15,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
     private final String MESSAGE_TEMPLATE = "**__Author:__** {AUTHOR}\n" +
             "**__Message:__** {MESSAGE}\n" +
             "\n" +
-            "Admin ping: <@&721867870346281091>\n*An admin will follow up with your request soon, and if none respond within 48 hours, feel free to ping the admin role again.*\n*If you haven't already, please change your nickname to **something resembling your real name**. Thank you!*\n*To close this ticket, someone with the {CLOSERS} role needs to react to this message. Doing so will mark the request as solved.*";
+            "Admin ping: <@&721867870346281091>\n*An admin will follow up with your request soon, and if none respond within 48 hours, feel free to ping the admin role again.*\n*If you haven't already, please change your nickname to **something resembling your real name**. Thank you!*\n*To close this ticket, someone with the {CLOSERS} role needs to react to this message. Reacting with a checkmark approves the request and reacting with anything else will close the request without approval.*";
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -67,7 +67,10 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
                     .replace("{AUTHOR}", event.getAuthor().getAsMention())
                     .replace("{MESSAGE}", event.getMessage().getContentRaw())
                     .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
-            ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
+            ).queue(message -> {
+                message.addReaction(guildInfo.getDefaultReactionEmoji()).queue();
+                message.addReaction("✅").queue();
+            });
         } catch (Exception e) {
             newChannel.sendMessage(event.getMessage().getContentRaw()).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
             newChannel.sendMessage(MESSAGE_TEMPLATE
