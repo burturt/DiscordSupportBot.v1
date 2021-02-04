@@ -35,6 +35,10 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         if (!StringUtils.isNumeric(possibleTicketAuthorId)) return;
         User ticketAuthor = event.getJDA().getUserById(possibleTicketAuthorId);
 
+        boolean allowedToClose = (guildInfo.isAuthorCanCloseTicket() && event.getUser().equals(ticketAuthor)) ||
+                event.getMember().getRoles().stream().map(ISnowflake::getId).anyMatch(s -> guildInfo.getRolesAllowedToCloseTickets().contains(s));
+        if (!allowedToClose) return;
+
         if (event.getReactionEmote().getEmoji().equals("\u2705")) {
             Role role = event.getGuild().getRolesByName("Student", false).get(0);
             event.getGuild().addRoleToMember(possibleTicketAuthorId, role).queue();
@@ -42,10 +46,6 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         } else {
             event.getChannel().sendMessage("Join request closed without approval by " + event.getUser().getAsMention() + ".").queue();
         }
-
-        boolean allowedToClose = (guildInfo.isAuthorCanCloseTicket() && event.getUser().equals(ticketAuthor)) ||
-                event.getMember().getRoles().stream().map(ISnowflake::getId).anyMatch(s -> guildInfo.getRolesAllowedToCloseTickets().contains(s));
-        if (!allowedToClose) return;
 
         // event.getMessageId()
         try {
