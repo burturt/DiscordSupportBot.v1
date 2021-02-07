@@ -18,4 +18,28 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: DiscordSupportBot
-          path: target/DiscordSupportBot.jar  
+          path: target/DiscordSupportBot.jar        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: AUTO-${{ github.run_number }}
+          release_name: "[AUTO] Build ${{ github.run_number }}"
+          body: |
+            New build!
+            Check out https://github.com/burturt/DiscordSupportBot.v1/commits/legacy to see changes
+            If you want to run the program yourself, download the jar file under assets to run then run `java -jar DiscordSupportBot.jar BOTTOKEN`
+          draft: false
+          prerelease: false
+      - name: Upload Jar Build
+        id: upload-build
+        uses: actions/upload-release-asset@v1 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: target/DiscordSupportBot.jar  
+          asset_name: DiscordSupportBot.jar  
+          asset_content_type: application/java-archive
